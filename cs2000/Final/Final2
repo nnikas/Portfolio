@@ -1,0 +1,402 @@
+Script started on Wed 11 May 2016 12:07:09 PM EDT
+]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ pwd
+/home/students/nicolenikas/CISC2000/Final
+]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ cat Student.h
+/* 
+Nicole Nikas
+Bellow is a base class for a student with members for a name, date of birth, cellphone, major, degree and gpa
+The name phone and date class have been istream and ostream overloaded to make the input and output easier
+This class only has one method and that is to print a summary of the derrived base class information 
+
+*/
+#ifndef STUDENTT_H
+#define STUDENTT_H
+#include<iostream>
+#include "name.h"
+#include "date.h"
+#include "phone.h"
+
+
+
+using namespace std;
+
+class Student{
+    public:
+    // default constructor
+    Student(){
+    degree="Degree";
+    major="Major";
+    gpa=4.0;
+    
+
+    }
+    Student(Name, Date, Phone, string, string, double);    
+    static void printSummaryInfo();
+    static int nGrad;
+    static int nUnd;
+    static double avgGrad;
+    static double avgUnd;
+    //data members that make up the fields of a students information 
+    protected:
+    
+    Name nm;
+    Date dob;
+    Phone cell;
+    string major;
+    string degree;
+    double gpa;
+        
+        
+    
+
+};
+#endif
+]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ cat Student.cpp
+#include "Student.h"
+int Student::nGrad=0;
+int Student::nUnd=0;
+double Student::avgGrad=0.;
+double Student::avgUnd=0.;
+
+Student::Student(Name n, Date d, Phone p, string m, string deg, double g){
+    nm=n;
+    dob=d;
+    cell=p;
+    major=m;
+    gpa=g;
+    degree=deg;
+}
+
+void Student::printSummaryInfo() {
+
+
+        cout<<"There are "<< nUnd<<" undergraduate students. " <<endl;
+        cout<<"The average undergraduate gpa is "<<avgUnd<<endl;
+        cout<<"There are "<< nGrad<<" graduate students." <<endl;
+        cout<<"The average graduate gpa is "<<avgGrad<<endl;
+        
+
+}]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ cat Undergrad.c[Kh
+/* 
+this is a derrived class from the base class Student
+it has only one method which is to print the members of the Student
+as well as the member parents phone, which is a member of only the Undergrad class
+
+*/
+#ifndef UNDERGRAD_H
+#define UNDERGRAD_H
+#include<iostream>
+#include "Student.h"
+
+
+
+using namespace std;
+
+class Undergrad:public Student{
+    public:
+    Undergrad(){
+        
+    }
+    Undergrad(Phone, Name, Date, Phone, string, string, double);
+    void print();
+    private:
+    Phone par;
+
+    
+    
+    
+};
+
+#endif
+]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ cat Undergrad.cpp
+#include "Undergrad.h"
+    Undergrad::Undergrad(Phone parent, Name n, Date d, Phone p, string m, string deg, double g): Student(n,d,p,m,deg,g){
+        
+        par=parent;
+        nUnd++;
+        avgUnd += gpa/nUnd;
+    }
+    
+    void Undergrad::print(){
+        cout<<"Name:"<<endl;
+        cout<<nm<<endl;
+        cout<<"Date of Birth:"<<endl;
+        cout<<dob<<endl;
+        cout<<"Parents Cell: "<<par<<endl;
+        cout<<"Students Cell: "<<cell<<endl;
+        cout<<"Major: "<<major<<endl;
+        cout<<"Degree: "<<degree<<endl;
+        cout<<"GPA: "<<gpa<<endl;
+        
+        
+    }]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ cat Grad.h
+/* 
+This is a derrived class of the base class Student
+it has one method and that is to print the members of the student 
+as well as the area of research which is only a member of the grad class not the Student
+
+*/
+#ifndef GRAD_H
+#define GRAD_H
+#include<iostream>
+#include "Student.h"
+
+
+
+using namespace std;
+
+class Grad:public Student{
+    public:
+    Grad(){
+        
+    }
+    Grad(string, Name, Date, Phone, string, string, double);
+    void print();
+    private:
+    string res;
+
+    
+    
+    
+};
+
+#endif
+]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ cat Grad.cpp
+    #include "Grad.h"
+    Grad::Grad(string r, Name n, Date d, Phone p, string m, string deg, double g): Student(n,d,p,m,deg,g){
+        
+        res=r;
+        nGrad++;
+        avgGrad += gpa/nGrad;
+    }
+    
+    void Grad::print(){
+        cout<<"Name:"<<endl;
+        cout<<nm<<endl;
+        cout<<"Date of Birth:"<<endl;
+        cout<<dob<<endl;
+        cout<<"Students Cell: "<<cell<<endl;
+        cout<<"Area of Reasearch: "<<res<<endl;
+        cout<<"Major: "<<major<<endl;
+        cout<<"Degree: "<<degree<<endl;
+        cout<<"GPA: "<<gpa<<endl;
+        
+        
+    }]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ ls
+date.cpp  execStud.cpp   final  Grad.cpp  Grad.h~   name.h     phone.h       Student.cpp  Student.h~     Undergrad.h
+date.h    execStud.cpp~  Final  Grad.h    name.cpp  phone.cpp  resultsFinal  Student.h    Undergrad.cpp  Undergrad.h~
+]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ g++ Student.cpp Grad.cpp Undergrad.cpp name.cpp date.cpp phone.cpp execStud.cpp -o final -std=c++11
+]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ ./final[K[K[K[K[K[K[Kcat execStud.cpp
+/*
+Nicole Nikas 
+This exectuion is similar to that of the Package execution. It allocates an array of pointers
+for the both the grad and under grad class
+It then promts the user what action they would like to take 
+It fills the array based on the action chosen by getting and inpput and creating each object
+then printing the information back to the user. When the user wishes to exit
+A summary of all the information that was entered is printed
+This includes each undergrad, number of undergrads, and the average gpa of grads
+as well as each grad, number of undergrads, and average gpa of undergrads 
+ */
+
+#include "Undergrad.h"
+#include "Grad.h"
+
+main () {
+
+        int response;
+
+        int i = 0;
+        int j = 0;
+
+
+        Undergrad *u[10];
+        Grad *g[10];
+
+        Student s;
+ 
+        string research;
+        Phone parent;
+        Name n; 
+        Date d; 
+        Phone p; 
+        string m; 
+        string deg; 
+        double gpa;
+        
+        //requests user input
+        cout << "What would you like to do? 0:exit, 1:Enter Undergrad, 2:Enter Graduate ";
+        cin >> response;
+        
+        //This is the exit option
+        if (response == 0){
+                cout<<"Goodbye"<<endl;
+        }
+        while(response!=0){
+
+
+        // this section adds to the Undergradn are Grad until it reaches 10 (the maximum I've chosen)
+
+        if(response== 1){
+                if (i<10) {
+                        cin >> n >> d;
+                        cout<< "Please enter your cell phone number: ";
+                        cin >> p;
+                        cout<< "Please enter your parent phone number: ";
+                        cin >> parent;
+                        cout<< "Please enter major: ";
+                        cin >> m;
+                        cout<< "Please enter degree: ";
+                        cin >> deg;
+                        cout<< "Please enter a gpa: ";
+                        cin >> gpa;
+                        u[i] = new Undergrad (parent, n, d, p, m, deg, gpa);
+                        u[i] -> print();
+                        i++;
+                }
+        }
+
+        if(response== 2){
+                if (j<10) {
+                        cin >> n >> d;
+                        cout<< "Please enter your cell phone number: ";
+                        cin >> p;
+                        cout<< "Please enter area of research: ";
+                        cin >> research;
+                        cout<< "Please enter major: ";
+                        cin >> m;
+                        cout<< "Please enter degree: ";
+                        cin >> deg;
+                        cout<< "Please enter a gpa: ";
+                        cin >> gpa;
+                        g[i] = new Grad (research, n, d, p, m, deg, gpa);
+                        g[j] -> print();
+                        j++;
+                }
+        }
+        cout << "Would you like to enter again? 0:exit, 1:Enter Undergrad, 2:Enter Graduate";
+        cin >> response;
+        }
+
+        //summary of two day packages ordered
+        cout << "Undergraduate Students:" << endl;
+        for (int i=0; i<Student::nUnd; i++){
+                cout << "Student number " << i+1 << endl;
+                u[i] -> print();
+        }
+        //summary of overnight packages ordered
+        cout << "Graduate Students:" << endl;
+        for (int i=0; i<Student::nGrad; i++){
+                cout << "Student number" << i+1 << endl;
+                g[i] -> print();
+        }
+        //summary of all packages
+        Student::printSummaryInfo();
+
+        cout << "Thank you!" << endl;
+}
+]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ ./final
+What would you like to do? 0:exit, 1:Enter Undergrad, 2:Enter Graduate 2
+Please enter First Name: 
+Nicole
+Please enter Last Name: 
+Nikas
+Please enter Middle Initial: 
+N
+Enter date of Birth
+Enter Day: 05
+
+Enter Month: 2 05
+
+Enter Year: 1994
+Please enter your cell phone number: Please enter a phone number in the for (XXX)XXX-XXXX: (203)- 548-1664
+Please enter area of research: Astro
+Please enter major: Engineering
+Please enter degree: BS
+Please enter a gpa: 3.1
+Name:
+Name: Nicole N Nikas
+
+Date of Birth:
+The date is: 
+5/5/1994
+
+Students Cell:  (203) 548 - 1664
+
+Area of Reasearch: Astro
+Major: Engineering
+Degree: BS
+GPA: 3.1
+Would you like to enter again? 0:exit, 1:Enter Undergrad, 2:Enter Graduate1
+Please enter First Name: 
+Mike
+Please enter Last Name: 
+Badey
+Please enter Middle Initial: 
+K J
+Enter date of Birth
+Enter Day: 22
+
+Enter Month: 11
+
+Enter Year: 1993
+Please enter your cell phone number: Please enter a phone number in the for (XXX)XXX-XXXX: (203)(1  111-2222 2
+Please enter your parent phone number: Please enter a phone number in the for (XXX)XXX-XXXX: (203)333-4444
+Please enter major: Buisness
+Please enter degree: BA
+Please enter a gpa: 3.2
+Name:
+Name: Mike J Badey
+
+Date of Birth:
+The date is: 
+11/22/1993
+
+Parents Cell:  (203) 333 - 4444
+
+Students Cell:  (203) 111 - 2222
+
+Major: Buisness
+Degree: BA
+GPA: 3.2
+Would you like to enter again? 0:exit, 1:Enter Undergrad, 2:Enter Graduate0
+Undergraduate Students:
+Student number 1
+Name:
+Name: Mike J Badey
+
+Date of Birth:
+The date is: 
+11/22/1993
+
+Parents Cell:  (203) 333 - 4444
+
+Students Cell:  (203) 111 - 2222
+
+Major: Buisness
+Degree: BA
+GPA: 3.2
+Graduate Students:
+Student number1
+Name:
+Name: Nicole N Nikas
+
+Date of Birth:
+The date is: 
+5/5/1994
+
+Students Cell:  (203) 548 - 1664
+
+Area of Reasearch: Astro
+Major: Engineering
+Degree: BS
+GPA: 3.1
+There are 1 undergraduate students. 
+The average undergraduate gpa is 3.2
+There are 1 graduate students.
+The average graduate gpa is 3.1
+Thank you!
+]0;nicolenikas@storm:~/CISC2000/Final[nicolenikas@storm Final]$ exit
+exit
+
+Script done on Wed 11 May 2016 12:13:34 PM EDT

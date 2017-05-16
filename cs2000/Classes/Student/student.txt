@@ -1,0 +1,58 @@
+nnikas:~/workspace/Classes $ g++ student.cpp -o student
+nnikas:~/workspace/Classes $ ./student
+Default Constructor
+Constructor 2
+Now computing test on Student 1 
+Name: Nicole N Nikas
+Student ID Number: 10707360
+Gender: F
+Birthday: 5/24/1994
+Please answer the following questions with your information 
+Please enter First Name: 
+Martha
+Please enter Last Name: 
+Stuart
+Please enter Middle Initial: 
+F
+Please enter Gender{M, F, U}: 
+U
+Please enter Birthdate{mm/dd/yyy}: 
+10/20/2000
+Please enter your studentID Number: 
+12345678
+Name: Martha F Stuart
+Student ID Number: 12345678
+Gender: U
+Birthday: 10/20/2000
+Now setting back to default. 
+Name: FirstName M LastName
+Student ID Number: 10000
+Gender: U
+Birthday: 1/1/1916
+Now computing test on Student 2 
+Name: Angelina J Pitt
+Student ID Number: 10707360
+Gender: F
+Birthday: 5/24/1994
+Please answer the following questions with your information 
+Please enter First Name: 
+Mike
+Please enter Last Name: 
+Badey
+Please enter Middle Initial: 
+J
+Please enter Gender{M, F, U}: 
+M
+Please enter Birthdate{mm/dd/yyy}: 
+11/22/1993
+Please enter your studentID Number: 
+1234567
+Name: Mike J Badey
+Student ID Number: 1234567
+Gender: M
+Birthday: 11/22/1993
+Now setting back to default. 
+Name: FirstName M LastName
+Student ID Number: 10000
+Gender: U
+Birthday: 1/1/1916

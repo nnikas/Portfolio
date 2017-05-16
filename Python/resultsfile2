@@ -1,0 +1,116 @@
+Script started on Tue 10 Feb 2015 01:18:46 PM EST
+]0;nikas@storm:/home/students/nikas/cs2011[nikas@storm cs2011]$ cat rps.py
+import random
+def Main():
+    print "~A Game of Rock, Paper, Scissor.~"
+    global menuSelect
+    print("Select a choice: \n [1]: Rock \n [2]: Paper\n [3]: Scissor \n [4]: Quit")
+    menuSelect = input("Enter menu selection: ")
+
+
+
+    try:
+        menuSelect = int(menuSelect)
+        print "\n You chose a valid answer\n"
+        play()
+    except ValueError:
+        print "That's not a valid answer, silly.\n"
+        Main()
+    return menuSelect
+
+def play() :
+    playerChoice = int(menuSelect)
+    if playerChoice == 4:
+        return 0
+    else:
+        pcChoice = pcGenerate
+        outcome = evaluategame(playerChoice, pcChoice)
+        return 1
+
+def pcGenerate() :
+    pcChoice = random.randint(1,3)
+    return pcChoice
+
+def evaluategame(playerChoice, pcChoice) :
+    if playerChoice == 1:
+        print("You have chosen rock.")
+        if pcChoice == 1:
+            print("Computer has chose rock as well. TIE!")
+            return 0
+        elif pcChoice == 2:                
+            print("The computer has chosen paper. Paper covers rock. You LOSE!")
+            return -1
+        else:        
+            print("The computer has chosen scissors. Rock breaks scissors. You WIN!")
+            return 1
+        
+    elif playerChoice == 2:
+         print("You have chosen paper.")
+         if pcChoice == 1:         
+             print("The computer has chosen rock. Paper covers rock. You WIN!")
+             return 1
+         elif pcChoice == 2:         
+             print("The computer has chosen paper as well. TIE!")
+             return 0
+         else:         
+             print("The computer has chosen scissors. Scissors cut paper. You LOSE!")
+             return -1
+    elif playerChoice > 4:
+         print("That is not an answer, try again.")
+         Main()
+    else: 
+          print("You have chosen scissors")
+          if pcChoice == 1:          
+              print("The computer has chosen rock. Rock breaks scissors. You LOSE!")
+              return -1
+          elif pcChoice == 2:      
+              print("The computer has chosen paper. Scissors cut paper. You WIN!")
+              return 1
+          else:                     
+              print("The computer has chosen scissors as well. TIE!")
+              return 0
+
+
+Main()
+
+
+
+]0;nikas@storm:/home/students/nikas/cs2011[nikas@storm cs2011]$ python rps.py
+~A Game of Rock, Paper, Scissor.~
+Select a choice: 
+ [1]: Rock 
+ [2]: Paper
+ [3]: Scissor 
+ [4]: Quit
+Enter menu selection: 2
+
+ You chose a valid answer
+
+You have chosen paper.
+The computer has chosen scissors. Scissors cut paper. You LOSE!
+]0;nikas@storm:/home/students/nikas/cs2011[nikas@storm cs2011]$ python rps.py
+~A Game of Rock, Paper, Scissor.~
+Select a choice: 
+ [1]: Rock 
+ [2]: Paper
+ [3]: Scissor 
+ [4]: Quit
+Enter menu selection: 6
+
+ You chose a valid answer
+
+That is not an answer, try again.
+~A Game of Rock, Paper, Scissor.~
+Select a choice: 
+ [1]: Rock 
+ [2]: Paper
+ [3]: Scissor 
+ [4]: Quit
+Enter menu selection: 4
+
+ You chose a valid answer
+
+]0;nikas@storm:/home/students/nikas/cs2011[nikas@storm cs2011]$ exit
+exit
+
+Script done on Tue 10 Feb 2015 01:20:10 PM EST

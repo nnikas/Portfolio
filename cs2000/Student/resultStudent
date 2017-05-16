@@ -1,0 +1,973 @@
+Script started on Wed 16 Mar 2016 10:36:51 AM EDT
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ pwd
+/home/students/nicolenikas/CISC2000/cs2000/Classes/Student
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat date.h
+#include<iostream>
+using namespace std;
+class Date {
+
+    public:
+    
+    Date(){
+        
+        m=d=1;
+        y=1916;
+    
+    }
+    Date(int day, int month, int year);
+    void checkdate(int month, int day, int year);
+    void display() const;
+    void input();
+    bool setDate(int BM,int BD, int BY);
+    bool setDay(int day);
+    bool setMonth(int month);
+    bool setYear(int year);
+    int getDay();
+    int getMonth();
+    int getYear();
+    
+
+    private:
+    int m, d, y;
+    
+    
+};
+
+
+
+
+
+
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat date.cpp
+#include"date.h"
+
+    
+
+    Date::Date(int month, int day, int year){
+        if(setDate(day, month, year)){
+            d= day;
+            m= month;
+            y = year;
+        }
+        else{
+            cout<<"Wrong date"<<endl;
+        }
+
+
+    }
+    
+    bool Date::setMonth( int month ) {
+	    bool retstat = true;
+
+	    if ( month < 1 || month > 12 )
+	    	retstat = false;
+	    else
+	    	Date::m = month;
+
+	    return( retstat );
+    }
+    
+    bool Date::setDay( int day ) {
+	    bool retstat = true;
+    
+        if (m%2==1&&m<8){
+            if(day>31||day<1){
+                retstat = false;
+            }
+            else{
+                retstat = true;
+            }
+        }
+        else if(m%2==0&&m<8){
+            if(m==2&&day<28){
+                retstat = true;
+            }
+            else{
+                retstat = false;
+            }
+            
+            if(day>30||day<1){
+                retstat = false;
+            }
+            else{
+                retstat = true;
+            }
+        }
+        else if(m%2==1&&m>8){
+            if(day>30||day<1){
+                retstat = false;
+            }
+            else{
+                retstat = true;
+            }
+            
+        }
+        else if(m%2==0&&m>8){
+            if(day>31||day<1){
+                retstat = false;
+            }
+            else{
+                retstat = true;
+            }
+            
+        }
+        
+	    return( retstat );
+    }
+    
+    bool Date::setYear( int year ) {
+	    bool retstat = true;
+
+	    if ( year < 1916 || year > 2016 )
+	    	retstat = false;
+	    else
+	    	Date::y = year;
+
+	    return( retstat );
+    }
+
+    bool Date::setDate(int day, int month, int year){
+        bool retstat = true;
+        if (setDay(day)&&setMonth(month)&&setYear(year)){
+            retstat = true;
+        }
+        else{
+            retstat = false;
+        }
+        return retstat;
+    }
+
+    void Date::display() const{
+        cout<<"The date you entered is: "<<endl;
+        cout<<m<<"/"<<d<<"/"<<y<<endl;
+    
+    }
+    void Date::input(){
+        int d = 0;
+        int m = 0;
+        int y = 0;
+        
+    	// Request and validate the day
+    	do {	
+	    	if (!d)
+		    	cout << "Enter Day: ";
+		    else    
+			    cout << d << " is an invalid day, re-enter: ";
+		    cin >> d;
+	    } while ( !setDay( d ) );
+	    	    cout << endl;
+
+    	// Request and validate the month
+    	do {	
+	    	if (!m)
+		    	cout << "Enter Month: ";
+		    else    
+			    cout << m << " is an invalid month, re-enter: ";
+		    cin >> m;
+	    } while ( !setMonth( m ) );
+	    	    cout << endl;
+
+    	// Request and validate the year
+    	do {	
+	    	if (!y)
+		    	cout << "Enter Year: ";
+		    else    
+			    cout << y << " is an invalid year, re-enter: ";
+		    cin >> y;
+	    } while (!setYear( y ) );
+
+    
+    }
+
+    
+    int Date::getDay(){
+        return d;
+    }
+    int Date::getMonth(){
+        return m;       
+    }
+    int Date::getYear(){
+        return y;
+    }]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat date.exec[K[K[K[K[K[K[K[K[Kexecdate.cpp
+#include"date.h"
+
+main(){
+    void test(Date &);
+    Date dt;
+    Date dt2(05,24,1994);
+    Date dt3(11,22,1993);
+
+
+    cout<<"Now testing dt"<<endl;
+    test(dt);
+    cout<<"Now testing dt2"<<endl;
+    test(dt2);
+    cout<<"Now testing dt3"<<endl;
+    test(dt3);
+    
+    
+
+}
+
+void test(Date &d){
+
+   // d.initialize();
+    d.display();
+   // d.input();
+   // d.display();
+}]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ g++ date.cpp execdate.cpp -o date
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ ./date
+Now testing dt
+The date you entered is: 
+1/1/1916
+Now testing dt2
+The date you entered is: 
+5/24/1994
+Now testing dt3
+The date you entered is: 
+11/22/1993
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat name.h
+#include <iostream>
+using namespace std;
+
+class Name{
+    public:
+    Name(){
+        fname= "First";
+        minitial = 'M';
+        lname = "Last";
+    }
+    Name(string FN, char MI, string LN);
+    void setName(string FN, char MI, string LN);
+    void display();
+    void input();
+
+    
+    private:
+    string fname, lname;
+    char minitial;
+    
+};]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat namep[K.cpp
+#include "name.h"
+
+    Name::Name(string FN, char MI, string LN){
+        fname = FN;
+        lname = LN;
+        minitial = MI;
+    }
+    void Name::setName(string FN, char MI, string LN){
+        fname = FN;
+        lname = LN;
+        minitial = MI;
+    }
+    void Name::input(){
+
+      //  cout<<"Please answer the following questions with your information "<<endl;
+        cout<<"Please enter First Name: "<<endl;
+        cin>>fname;
+        cout<<"Please enter Last Name: "<<endl;
+        cin>>lname;
+        cout<<"Please enter Middle Initial: "<<endl;
+        cin>>minitial;
+    }
+    void Name::display(){
+        cout<<"Name: "<<fname<<" "<<minitial<<" "<<lname<<endl;
+    }]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat execname.cpp
+#include"name.h"
+
+
+
+
+main(){
+    void test(Name &);
+    Name n1;
+    Name n2("Angelina",'J',"Pitt");
+
+
+
+    cout<<"Now testing n1"<<endl;
+    test(n1);
+    cout<<"Now testing n2"<<endl;
+    test(n2);
+
+    
+    
+
+}
+
+void test(Name &n){
+
+   
+    n.display();
+   // n.input();
+   // n.display();
+   //n.setName("FirstName", "M", "LastName");
+}]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ g++ name.cpp execnamep.cpp -o e[Kname
+g++: error: execnamep.cpp: No such file or directory
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ g++ name.cpp execnamep.cpp -o name[C[1P
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ ./name
+Now testing n1
+Name: First M Last
+Now testing n2
+Name: Angelina J Pitt
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat course.cpp course[K[K[K[K[K[K[K[K[K[Kh
+#ifndef COURSE_H
+#define COURSE_H
+
+#include <iostream>
+using namespace std;
+
+class Course {
+public:
+    // Class Constructors
+    // default constructor
+	Course(){
+	    courseid=1000;
+	    numcredit=0;
+	    gradepoint=0.;
+	    coursename="CourseName";
+	    instructor="Instructor";
+	} 
+	Course( int, int, double, string, string); // constructor that takes five explicit arguments
+
+
+	// Class level external input/output
+	void input();
+	void display();
+
+	// Mutator methods
+	bool setCourse( int, int, double, string, string );
+
+
+	// Accessor methods
+	int getCredit();
+	int getGrade();
+
+
+
+private:
+    int courseid;
+    int numcredit;
+    double gradepoint;
+    string coursename;
+    string instructor;
+};
+
+#endif]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat course.cpp
+#include "course.h"
+
+    // constructor that takes five explicit arguments
+	Course::Course( int cid, int nc, double gpa, string cn, string inst){
+	    do{
+	       courseid=cid;
+	       numcredit=nc;
+	       gradepoint=gpa;
+	       coursename= cn;
+	       instructor=inst;
+	    }while(setCourse(cid, nc, gpa, cn, inst)==true);
+	}
+
+
+	// Class level external input/output
+	void Course::input(){
+	    int cid; 
+	    int nc;
+	    double gpa;
+	    string cn; 
+	    string inst;
+	    cout<<"Please enter a CourseID, the number of credits, your grade in the class, the course name, and the instructor"<<endl;
+    	cin>>cid;
+    	cin>>nc;
+    	cin>>gpa;
+    	cin>>cn;
+    	cin>>inst;
+        if(setCourse(cid, nc, gpa, cn, inst)==true){
+	        courseid=cid;
+	        numcredit=nc;
+	        gradepoint=gpa;
+	        coursename= cn;
+	        instructor=inst;
+        }
+	}
+	void Course::display(){
+	    cout<<"CourseID is: "<<courseid<<endl;
+	    cout<<"Number of Credits: "<<numcredit<<endl;
+	    cout<<"Grade: "<<gradepoint<<endl;
+	    cout<<"Course Name: "<<coursename<<endl;
+	    cout<<"Instructor: "<<instructor<<endl;
+	    
+	}
+
+	// Mutator methods
+	bool Course::setCourse( int cid, int nc, double gpa, string cn, string inst){
+	    bool retstat = true;
+	    if (cid<1000 || cid>4000){
+	        cout<<"This is not a course"<<endl;
+	        retstat = false;
+	    }
+	    else if (nc<0||nc>4){
+	        cout<<"This numbero of credits is impossible"<<endl;
+	        retstat = false;
+	    }
+	    else if(gpa<0.0||gpa>4.0){
+	        cout<<"This gpa is impossible"<<endl;
+	        retstat = false;
+	    }
+	    else {
+	        retstat = true;
+	    }
+	    return(retstat);
+	}
+
+
+	// Accessor methods
+	int Course::getCredit(){
+	    return numcredit;
+	}
+	int Course::getGrade(){
+	    return gradepoint;
+	}]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat c[Kexeccourse.cpp
+#include"course.h"
+
+
+
+
+main(){
+    void test(Course);
+    Course c1;
+    Course c2(2000, 4, 3.0, "CS2", "Papadakis");
+
+
+
+    cout<<"Now testing c1"<<endl;
+    test(c1);
+    cout<<"Now testing c2"<<endl;
+    test(c2);
+
+    
+    
+
+}
+
+void test(Course c){
+
+   
+    c.display();
+ //   c.input();
+  //  c.display();
+
+}]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ g++ execcourse.cpp course.cpp -o course
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ ./course
+^Z
+[1]+  Stopped                 ./course
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat program.h
+#include <iostream>
+using namespace std;
+
+class Program{
+    public:
+    Program(){
+        campus= "RH";
+        major= "Engineering";
+        minor= "CompSci";
+        degree="BS";
+    }
+    Program(string c, string m, string mm, string d);
+    void checkCampus(string c);
+    void checkDegree(string d);
+    void setProgram(string c, string m, string mm, string d);
+    void display();
+    void input();
+
+    
+    private:
+    string campus, major, minor, degree;
+
+    
+};]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat program.cpp
+#include "program.h"
+
+    Program::Program(string c, string m, string mm, string d){
+        
+
+        campus= c;
+        checkCampus(c);
+        major= m;
+        minor= mm;
+        degree= d;
+        checkDegree(d);
+    }
+    void Program::checkCampus(string c){
+         if (c== "RH"){
+            campus = c;
+        }
+        else if (c=="LC"){
+            campus = c;
+        }
+        else if (c=="WC"){
+            campus = c;
+        }
+        else{
+            cout<<"You have not endered a Campus"<<endl;
+            campus="NotaCampus";
+        }
+    }
+    void Program::checkDegree(string d){
+        if(d=="BS"){
+            degree = d;
+        }
+        else if (d=="BA"){
+            degree = d;
+        }
+
+        else{
+            cout<<"You have not endered a Degree"<<endl;
+            degree="NotaDegree";
+        }
+    }
+    void Program::setProgram(string c, string m, string mm, string d){
+        campus = c;
+        major = m;
+        minor = mm;
+        degree = d;
+        checkDegree(d);
+        checkCampus(c);
+    }
+    void Program::input(){
+        cout<<"Please answer the following questions with your information "<<endl;
+        cout<<"Please enter Campus: "<<endl;
+        cin>>campus;
+        cout<<"Please enter Major: "<<endl;
+        cin>>major;
+        cout<<"Please enter Minor: "<<endl;
+        cin>>minor;
+        cout<<"Please enter Degree: "<<endl;
+        cin>>degree;
+    }
+    void Program::display(){
+        cout<<"Program: "<<campus<<" "<<major<<" "<<minor<<" "<<degree<<endl;
+    }]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat program[K[K[K[K[K[K[Kexecprogram.cpp
+#include"program.h"
+
+
+
+
+main(){
+    void test(Program &);
+    Program p1;
+    Program p2("RH","Engineering","CompSci","BS");
+
+
+
+    cout<<"Now testing p1"<<endl;
+    test(p1);
+    cout<<"Now testing p2"<<endl;
+    test(p2);
+
+    
+    
+
+}
+
+void test(Program &p){
+
+   
+    p.display();
+ //   p.input();
+  //  p.display();
+
+}]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ g++ execprogram.cpp program.cpp -o program
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ ./program
+Now testing p1
+Program: RH Engineering CompSci BS
+Now testing p2
+Program: RH Engineering CompSci BS
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat phoe[Kne.c[Kh
+#include <iostream>
+using namespace std;
+
+class Phone{
+    public:
+    Phone(){
+        areaCode=111;
+        exchange= 111;
+        line=1111;
+    }
+    Phone(int a, int e, int l);
+    bool checkAreaCode(int a);
+    bool checkExchange(int e);
+    bool checkLine(int l);
+    bool setPhone(int a, int e, int l);
+    int getAreaCode();
+    int getLine();
+    int getExchange();
+    void display();
+    void input();
+
+    
+    private:
+    const int MAX_TEXT=10;
+    int areaCode, exchange, line;
+
+    
+};]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat hp[K[Kphone.cpp
+#include "phone.h"
+    Phone::Phone(int a, int e, int l){
+        if(setPhone(a,e,l)==true){
+            areaCode=a;
+            exchange=e;
+            line=l;
+            
+        }
+    }
+    bool Phone::checkAreaCode(int a){
+        bool retstat= false;
+        if(a>100&&a<999){
+            retstat = true;
+        }
+        else{
+            retstat = false;
+        }
+        return retstat;
+    }
+    bool Phone::checkExchange(int e){
+        bool retstat= false;
+        if(e>100&&e<999){
+            retstat = true;
+        }
+        else{
+            retstat = false;
+        }
+        return retstat;
+    }
+    bool Phone::checkLine(int l){
+        bool retstat= false;
+        
+        if(l>1000&&l<9999){
+            retstat = true;
+        }
+        else{
+            retstat = false;
+        }
+        return retstat;
+    }
+    bool Phone::setPhone(int a, int e, int l){
+        bool retstat = false;
+        if(checkAreaCode(a)&&checkExchange(e)&&checkLine(l)){
+            retstat = true;
+            areaCode=a;
+            exchange=e;
+            line=l;
+        }
+        else{
+            retstat = false;
+        }
+
+
+        return retstat;
+    }
+    int Phone::getAreaCode(){
+        return areaCode;
+    }
+    int Phone::getLine(){
+        return line;
+    }
+    int Phone::getExchange(){
+        return exchange;
+    }
+    
+    void Phone::display(){
+        cout<<" ("<<areaCode<<") "<<exchange<<" - "<<line<<endl;
+    }
+    void Phone::input(){
+        int a,e,l;
+        char o, c,d;
+        cout<<"Please enter a phone number in the for (XXX)XXX-XXXX: ";
+        cin>>o>>a>>c>>e>>d>>l;
+        if(setPhone(a,e,l)==true){
+            areaCode=a;
+            exchange=e;
+            line=l;
+        }
+        else{
+            cout<<"This number is incorrect please enter again:";
+            cin>>o>>a>>c>>e>>l;
+        }
+    }]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat phone[K[K[K[K[Kexecphome[K[Kne.cpp
+#include"phone.h"
+
+
+
+
+main(){
+    void test(Phone p);
+    Phone p1;
+    Phone p2(203,548,1664);
+
+
+
+    cout<<"Now testing p1"<<endl;
+    test(p1);
+    cout<<"Now testing p2"<<endl;
+    test(p2);
+
+    
+    
+
+}
+
+void test(Phone p){
+
+   
+    p.display();
+    p.input();
+  //  p.display();
+
+}]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ g++ execphoe[Kne.cpp phone.cpp -o phone
+In file included from [01m[Kexecphone.cpp:1:0[m[K:
+[01m[Kphone.h:24:24:[m[K [01;35m[Kwarning: [m[Knon-static data member initializers only available with -std=c++11 or -std=gnu++11
+     const int MAX_TEXT=10;
+[01;32m[K                        ^[m[K
+In file included from [01m[Kphone.cpp:1:0[m[K:
+[01m[Kphone.h:24:24:[m[K [01;35m[Kwarning: [m[Knon-static data member initializers only available with -std=c++11 or -std=gnu++11
+     const int MAX_TEXT=10;
+[01;32m[K                        ^[m[K
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ ./[K[Kg++ execphone.cpp phone.cpp -o phone -std=c++11
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ ../[K[K.[K/phome[K[Kne
+Now testing p1
+ (111) 111 - 1111
+Please enter a phone number in the for (XXX)XXX-XXXX: (203)252-1198
+Now testing p2
+ (203) 548 - 1664
+Please enter a phone number in the for (XXX)XXX-XXXX: (203)661-7160
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat student.h
+/* 
+Nicole Nikas 
+02/16/2016
+CS2000
+In this program you will find the deffinition of the student class which includes 
+the first and last name, middle initial, gender, birthday and student ID number.
+There are varios methods that are used to set the values of the members of the class.
+Lastly the test function found after the main function is used to check the methods of the objects(s1 and s2)
+of the Student class.
+
+*/
+#include<iostream>
+#include "name.h"
+#include "date.h"
+#include "program.h"
+#include "course.h"
+#include "phone.h"
+
+//#ifndef STUDENT_H
+//#define STUDENT_H
+
+using namespace std;
+
+class Student{
+    public:
+    // default constructor
+    Student(){
+      //  cout<<"Default Constructor"<<endl;
+        studId=10000000;
+        g= 'U';
+        numCourse = 1;
+
+    }
+    Student(Name name, Program prog, Date bdate, char gender, int SI, int num, Course c[10], Phone homep, Phone cellp);
+    bool setGender(char gend);
+    bool setIDNumber(int ID);
+    bool setStudent(Name name, Program prog, Date bdate, char gender, int SI, int num, Phone homep, Phone cellp);
+    bool setNumCourse(int num);
+    bool setPhone();
+    void display();
+    void input();
+    void calculteGPA();
+    void calculateCreditsEarned();
+
+
+      //data members that make up the fields of a students information 
+    private:
+    
+       
+        int studId;
+        Name n;
+        char g;
+        Date d;
+        Program p;
+        Course cdummy;
+        int numCourse;
+        Course completedCourses[10];
+        int totalCredits;
+        double GPA;
+        Phone homephone;
+        Phone cellphone;
+        
+        
+    
+
+};
+//endif
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Student[nicolenikas@storm Student]$ cat student.cpp
+
+#include "student.h"
+    // second constructor
+    Student::Student(Name name, Program prog, Date bdate, char gender, int SI, int num, Course c[10], Phone homep, Phone cellp){
+     //   cout<<"Constructor 2"<<endl;
+     
+        do{
+        n = name;
+        p  = prog;
+        d = bdate;      
+        studId = SI;
+        g = gender;
+
+
+
+        }while(setStudent(name, prog, bdate, gender, SI, num, homep, cellp)==true);
+        
+
+        for(int i =0; i<=num; i++){
+          completedCourses[i] = c[i];
+        }
+
+        
+    }
+
+
+    //this displays the information of a student
+    void Student::display(){
+        Course curcourse;
+        n.display();
+        cout<<"Student ID Number: "<<studId<<endl;
+        cout<<"Gender: "<<g<<endl;
+        d.display();
+        p.display();
+        
+        for(int i =0; i<=numCourse; i++){
+            curcourse=completedCourses[i];
+            curcourse.display();
+        }
+
+        cout<<totalCredits<<" total credits earned"<<endl;
+        cout<<GPA<<" total GPA"<<endl;
+        cout<<"Your homephone is";
+        homephone.display();
+        cout<<"Your cellphone is";
+        cellphone.display();
+        
+    }
+    // the input method for the user to input information into each field
+    void Student::input(){
+        Course curcourse;
+        cout<<"Please answer the following questions with your information "<<endl;
+        n.input();
+        cout<<"Please enter Gender{M, F, U}: "<<endl;
+        cin>>g;
+        d.input();
+        p.input();
+        cout<<"Please enter your studentID Number: "<<endl;
+        cin>>studId;
+        cout<<"Please enter the number of courses completed."<<endl;
+        cin>>numCourse;
+        for(int i=0; i<=numCourse; i++){
+            cout<<"Please enter a course"<<endl;
+            curcourse.input();
+            completedCourses[i] = curcourse;
+            
+        }
+        cout<<"Please enter a homephone: ";
+        homephone.input();
+        cout<<endl<<"Please enter a cellphone: ";
+        cellphone.input();
+        cout<<endl;
+        
+        
+
+        
+    }  
+    
+        //this method sets the gender while checking if the gender is one of the given options
+    bool Student::setGender(char gend){
+        bool retstat= false;
+        if (gend=='M'){
+            retstat = true;
+        }
+        else if (gend=='F'){
+           retstat = true;
+        }
+        else if (gend=='U'){
+            retstat = true;
+        }
+        else{
+            cout<<"You have not endered a gender"<<endl;
+            retstat = false;
+        }
+        return(retstat);
+    }
+    //this method uses other methods to set the information of the student
+    bool Student::setStudent(Name name, Program prog, Date bdate, char gender, int SI, int num, Phone homep, Phone cellp){
+        int day, month, year;
+        day = bdate.getDay();
+        month = bdate.getMonth();
+        year = bdate.getYear();
+        
+        int area1, line1, exchange1, area2, line2, exchange2;
+        area1 = homep.getAreaCode();
+        line1 = homep.getLine();
+        exchange1 = homep.getExchange();
+        area2= cellp.getAreaCode();
+        line2 = cellp.getLine();
+        exchange2 = cellp.getExchange();
+        
+        bool retstat = false;
+
+        if (setGender(gender)){
+            retstat = true;
+           // g=gender;
+        }
+        else{
+            retstat = false;
+        }
+       // n = name;
+        //p  = prog;
+        if(bdate.setDate(day,month,year)){
+            retstat = true;
+            //d=bdate;
+        }
+        else{
+            retstat = false;
+        }
+        
+        if(setIDNumber(SI)==true){
+            retstat = true;
+            studId = SI;
+            
+        }
+        else{
+            retstat = false;
+        }
+        
+        if(setNumCourse(num)==true){
+            retstat = true;
+            //numCourse = num;
+            
+        }
+        else{
+            retstat = false;
+        }
+        if(homep.setPhone(area1,exchange1, line1)==true){
+            retstat = true; 
+          //  homephone = homep;
+        }
+        else{
+            retstat = false;
+        }
+        if(cellp.setPhone(area2, exchange2, line2)==true){
+            retstat= true;
+        }
+        else{
+            retstat=false;
+        }
+        return(retstat);
+ 

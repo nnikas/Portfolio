@@ -1,0 +1,267 @@
+Script started on Wed 16 Mar 2016 10:31:47 AM EDT
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Polygon[nicolenikas@storm Polygon]$ pwd
+/home/students/nicolenikas/CISC2000/cs2000/Classes/Polygon
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Polygon[nicolenikas@storm Polygon]$ cat polygon.h
+#include <iostream>
+using namespace std;
+
+class Polygon{
+    
+    public:
+    Polygon():MAX(DEFAULT_MAX),MIN(DEFAULT_MIN){
+    
+        length=width=MIN;
+
+
+        
+
+
+        
+    
+    }
+    Polygon( int l, int w, int cmax, int cmin);
+    ~Polygon();
+    void display();
+    void input();
+    bool setSize(int x);
+    void calcArea();
+    void calcPerimeter();
+    int getMaxNumPolygons();
+    int getAvgArea();
+    int getAvgPerimeter();
+    void draw();
+
+    
+    private:
+    static const int MAX_POLYGONS=25;
+    static const int DEFAULT_MAX=100;
+    static const int DEFAULT_MIN=10;
+    int length;
+    int width;
+    int perimeter;// this needs to be calculated
+    int totalperimeter;
+    int totalarea;
+    int area;//this needs to be calculated
+    const int MAX;
+    const int MIN;
+    
+};]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Polygon[nicolenikas@storm Polygon]$ cat polygon.cpp
+#include "polygon.h"
+
+
+
+    Polygon::Polygon(int l, int w, int cmax, int cmin):MAX(cmax), MIN(cmin){
+        
+        Polygon::length=l;
+        Polygon::width=w;
+
+      
+    
+    }
+    
+    Polygon::~Polygon(){
+        cout<<"object is being destroyed"<<endl;
+        
+    }
+
+    void Polygon::input(){
+        int w,l;
+        cout<<"Please enter a width: ";
+        cin>>w;
+        if(setSize(w)==true){
+            width = w;
+        }
+        else{
+            cin>>w;
+        }
+        cout<<endl<<"Please enter a length: ";
+        cin>>l;
+        if(setSize(l)==true){
+            length = l;
+        }
+        else{
+            cin>>l;
+        }
+        cout<<endl;
+    }
+    void Polygon::display(){
+        cout<<"The width is "<<width<<endl;
+        cout<<"The lenght is "<<length<<endl;
+        cout<<"The area is "<<area<<endl;
+        cout<<"The perimeter is "<<perimeter<<endl;
+        
+    }
+    bool Polygon::setSize(int x){
+        bool retstat = false;
+        if(x>MIN&&x<MAX){
+            retstat = true;
+        }
+        else{
+            retstat = false;
+            cout<<"size is not within boundaries, enter again"<<endl;
+        }
+        return retstat;
+    }
+    void Polygon::calcPerimeter(){
+        perimeter=2*length+2*width;
+        totalperimeter+=perimeter;
+    }
+    void Polygon::calcArea(){
+        area=length*width;
+        totalarea+=area;
+        
+    }
+    int Polygon::getMaxNumPolygons(){
+        return MAX_POLYGONS;
+    }
+    
+    int Polygon::getAvgArea(){
+        return totalperimeter;
+    }
+    int Polygon::getAvgPerimeter(){
+        return totalarea;
+    }
+
+    void Polygon::draw(){
+
+
+        for (int l=1; l<=length; l++){
+                for (int w=1; w<=width; w++){
+                        if (l==1 || l==length || w==1 || w==width){
+                                cout << '*';
+                        }
+                        else{
+                                cout << ' ';
+                        }
+                }cout << endl;
+        }
+}]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Polygon[nicolenikas@storm Polygon]$ cat polygonepolygonxpolygonepolygoncpolygon[C[C[C[C[C[C[C.cpp
+#include"polygon.h"
+
+
+
+
+main(){
+   void test(Polygon *p);
+    
+    Polygon poly;
+    int innum;
+    cout<<"Please enter a number of polygons"<<endl;
+    cin>>innum;
+    static int NumberofPolygons=innum;
+    int MaxNumPoly = poly.getMaxNumPolygons();
+    
+   // Polygon p[MaxNumPoly];
+    Polygon *ptr[MaxNumPoly];
+    //ptr = new Polygon[MaxNumPoly];
+    for(int i=0; i<NumberofPolygons; i++){
+        //new Polygon poly1;
+        ptr[i] =  new Polygon;
+        //ptr+i;
+    }
+    
+    int inobj;
+    cout<<"Specify and object number you would like to enter details about: ";
+    cin>>inobj;
+    ptr[inobj]->input();
+    
+    
+    int drawobj;
+    cout<<"Specify which object you would like to draw: ";
+    cin>>drawobj;
+    cout<<endl;
+    ptr[drawobj]->draw();
+    
+    
+    
+    
+    
+
+    
+    for(int i=0; i<NumberofPolygons; i++){
+        cout<<"Polygon("<<i<<"):"<<endl;
+        test(ptr[i]);
+        
+    }
+    Polygon *maxptr = ptr[NumberofPolygons-1];
+    
+
+    cout<<NumberofPolygons<<" polygons were built."<<endl;
+    int avgP = maxptr->getAvgPerimeter();
+    avgP/=NumberofPolygons;
+    int avgA = maxptr->getAvgArea();
+    avgA/=NumberofPolygons;
+    cout<<"The average perimeter is "<<avgP<<" and the average area is "<<avgA<<endl;
+    
+    
+    for(int i = 0; i<NumberofPolygons; i++){
+        delete ptr[i];
+    }
+   // delete maxptr;
+}
+
+
+void test(Polygon *p){
+
+
+
+    p->calcPerimeter();
+    p->calcArea();
+    p->display();
+
+
+}
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Polygon[nicolenikas@storm Polygon]$ g++ polygon.cpp polygon.h[K[K[K[K[K[K[K[K[Kexecpolygon.h [K[Kcpp -o poly
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Polygon[nicolenikas@storm Polygon]$ ./poly
+Please enter a number of polygons
+4
+Specify and object number you would like to enter details about: 2
+Please enter a width: 12
+
+Please enter a length: 12
+
+Specify which object you would like to draw: 2
+
+************
+*          *
+*          *
+*          *
+*          *
+*          *
+*          *
+*          *
+*          *
+*          *
+*          *
+************
+Polygon(0):
+The width is 10
+The lenght is 10
+The area is 100
+The perimeter is 40
+Polygon(1):
+The width is 10
+The lenght is 10
+The area is 100
+The perimeter is 40
+Polygon(2):
+The width is 12
+The lenght is 12
+The area is 144
+The perimeter is 48
+Polygon(3):
+The width is 10
+The lenght is 10
+The area is 100
+The perimeter is 40
+4 polygons were built.
+The average perimeter is 25 and the average area is 10
+object is being destroyed
+object is being destroyed
+object is being destroyed
+object is being destroyed
+object is being destroyed
+]0;nicolenikas@storm:~/CISC2000/cs2000/Classes/Polygon[nicolenikas@storm Polygon]$ exit
+exit
+
+Script done on Wed 16 Mar 2016 10:33:36 AM EDT

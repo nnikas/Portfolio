@@ -1,0 +1,253 @@
+Script started on Sun 10 May 2015 08:23:28 PM EDT
+]0;nikas@storm:~/cs2011[nikas@storm cs2011]$ cat centeredMat.py
+#Nicole Nikas
+#05/08/15
+#Final Lab
+
+import numpy as np
+import sys
+import scipy.linalg
+import scipy.optimize
+import matplotlib
+matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
+
+def center(raw):#this class subtracts the mean from each collumn
+    a=raw-np.mean(raw,axis=0)
+    return a
+def RSS(X,Y,M):#RSS is computed by taking in X, Y , and M which is a function of X and Y
+    M.shape=(X.shape[1])
+    Yhat=X.dot(M)
+    Yhat.shape = Y.shape
+    RSS= (Y-Yhat).T.dot(Y-Yhat)
+    return RSS
+    
+def lasso_step(X,Y,t=0):#lasso minmizes M for a value t
+    f=lambda M:.5*RSS(X,Y,M)+t*scipy.linalg.norm(M,1)
+    minz=scipy.optimize.minimize(f,np.zeros(X.shape[1]))
+    result=minz.x
+    return result
+
+if __name__ == '__main__':
+    print sys.argv
+    g="medium"
+    data_file=open(sys.argv[1])
+    raw_data = np.loadtxt(data_file)
+    print raw_data.shape, raw_data.nbytes, raw_data.dtype
+    W =center(raw_data)
+    print W, 'is your centered matrix.'
+
+            #X and Y are split up in each process by the number given by the 3rd argument
+    if (sys.argv[2])=="fit":#when fit is chosen M and the variance are computed
+        i=raw_data.shape[1]
+        c=np.array([False]*i)
+        c[int(sys.argv[3])]=True
+        Y=W[:,c]
+        X=W[:,-c]
+        M= scipy.linalg.solve(X.T.dot(X),X.T.dot(Y))
+        print M,'is the fit matrix'
+
+        var = ((Y.T.dot(Y)-RSS(X,Y,M))/Y.T.dot(Y))
+        print var, 'is the variance of column 5 of your data'
+        print 'RSS(M)=',RSS(X,Y,M)
+
+    elif (sys.argv[2])=="pca":# when pca is chosen we compute the covariance matrix and then take the eigenvalues and eigenvectors
+        N= len(W[:,0])
+        CW=((1.0/(N-1))*(W.T.dot(W)))
+        eigvals, eigvs= scipy.linalg.eigh(CW)
+        print 'Here are your singular values in decreasing order',eigvals[::-1]
+        print 'and the direction associate with the largest singluar vector is',eigvs[:,-1]
+
+    elif (sys.argv[2])=="lasso":#lasso minimizes M by either setting t or find a range of ts 
+        i= raw_data.shape[1]
+        c=np.array([False]*i)
+        c[int(sys.argv[3])]=True
+        Y=W[:,c]
+        X=W[:,-c]
+
+        try:
+            t=float(sys.argv[4])
+            L=lasso_step(X,Y,t)
+            print  'min of',t,'is',L
+        except:
+            pass
+
+        Z=lasso_step(X,Y,0)
+        print 'min of 0 is',Z
+
+        tra=[]
+        T_left=0.0
+        T_right=np.max(np.abs(X.T.dot(Y)))
+        bifurcations= 10
+        for i in range(bifurcations):
+            T_mid = (T_right + T_left)/2.0
+            try:
+                M_mid = lasso_step(X,Y,T_mid)
+                if np.allclose(M_mid, 0.0):
+                    T_right = T_mid
+                else:
+                    T_left = T_mid
+            except:
+                print "lasso_step failed at t={}, so it must be too big. Treating as Mt==0" .format(T_mid)
+                T_right = T_mid
+
+        print 'Tmax =', T_right
+        
+
+        tlist=[]
+        for t in np.arange(0,T_right,T_right/10):
+            print t
+            try:
+                tra.append(lasso_step(X,Y,t))
+                tlist.append(t)
+            except:
+                pass
+        print tra
+        tra2=np.array(tra)
+        tlist=np.array(tlist)
+
+        (r,c)= tra2.shape     #below is the process to plott the trajectory of the lasso steps vs t 
+        fig, ax=plt.subplots()
+        for i in range(c):
+            ax.plot(tlist,tra2[:,i],label='m{}'.format(i))
+        ax.grid(True)
+        ax.legend()
+        s = g+"trajectory.png"
+        plt.savefig(s)
+                    
+    else:
+        print "Wrong command, try again."
+]0;nikas@storm:~/cs2011[nikas@storm cs2011]$ python centeredMA[Kat.py fit 5 [1@D[1@a[1@t[1@a[1@1[1@.[1@t[1@x[1@t[1@ 
+['centeredMat.py', 'Data1.txt', 'fit', '5']
+(100000, 6) 4800000 float64
+[[ -1.47181987e+00   1.39850733e-01   8.67797519e-01  -8.13084378e-01
+    1.36039208e-01  -3.33586343e+03]
+ [  9.66936930e-01  -2.46653812e+00   2.84957713e-01  -1.45918130e+00
+    1.94677073e+00  -7.93633022e+03]
+ [  1.23265784e-01   8.32925788e-01   7.94488640e-01  -8.13883055e-01
+    8.18098716e-01  -4.17536638e+03]
+ ..., 
+ [  1.21176851e+00  -9.47459932e-01  -4.11733913e-01  -4.72971902e-01
+   -3.19365183e-01  -3.05420841e+03]
+ [ -2.49293272e-01   1.23124677e+00  -2.79811062e-01   9.97918221e-01
+   -1.06553272e-01   5.20571272e+03]
+ [ -3.16412925e-01  -1.46055613e-01  -9.00412990e-02   1.37318608e+00
+   -5.57278509e-01   7.12238408e+03]] is your centered matrix.
+[[ -5.30999996e+02]
+ [  1.39999741e+01]
+ [  1.99997483e-01]
+ [  5.06699999e+03]
+ [  2.70001484e+00]] is the fit matrix
+[[ 1.]] is the variance of column 5 of your data
+RSS(M)= [[ 2.50892285]]
+]0;nikas@storm:~/cs2011[nikas@storm cs2011]$ python centeredMat.py Data1.txt fit 5 [C[1P [K[1P [1P [1P p c a [C 5 [C 
+['centeredMat.py', 'Data1.txt', 'pca', '5']
+(100000, 6) 4800000 float64
+[[ -1.47181987e+00   1.39850733e-01   8.67797519e-01  -8.13084378e-01
+    1.36039208e-01  -3.33586343e+03]
+ [  9.66936930e-01  -2.46653812e+00   2.84957713e-01  -1.45918130e+00
+    1.94677073e+00  -7.93633022e+03]
+ [  1.23265784e-01   8.32925788e-01   7.94488640e-01  -8.13883055e-01
+    8.18098716e-01  -4.17536638e+03]
+ ..., 
+ [  1.21176851e+00  -9.47459932e-01  -4.11733913e-01  -4.72971902e-01
+   -3.19365183e-01  -3.05420841e+03]
+ [ -2.49293272e-01   1.23124677e+00  -2.79811062e-01   9.97918221e-01
+   -1.06553272e-01   5.20571272e+03]
+ [ -3.16412925e-01  -1.46055613e-01  -9.00412990e-02   1.37318608e+00
+   -5.57278509e-01   7.12238408e+03]] is your centered matrix.
+Here are your singular values in decreasing order [  2.60332636e+07   1.01374932e+00   1.00066436e+00   9.95326248e-01
+   9.87826348e-01   9.83017577e-13]
+and the direction associate with the largest singluar vector is [  2.06857885e-05  -6.18053577e-07  -3.59904591e-07  -1.95185609e-04
+  -6.00210443e-07  -9.99999981e-01]
+]0;nikas@storm:~/cs2011[nikas@storm cs2011]$ python centeredMat.py Data1.txt pca 5  [1P[C[K[1P[1P[1P[1@l[1@a[1@s[1@s[1@o[C[C [1@5[C[C 
+['centeredMat.py', 'Data1.txt', 'lasso', '5']
+(100000, 6) 4800000 float64
+[[ -1.47181987e+00   1.39850733e-01   8.67797519e-01  -8.13084378e-01
+    1.36039208e-01  -3.33586343e+03]
+ [  9.66936930e-01  -2.46653812e+00   2.84957713e-01  -1.45918130e+00
+    1.94677073e+00  -7.93633022e+03]
+ [  1.23265784e-01   8.32925788e-01   7.94488640e-01  -8.13883055e-01
+    8.18098716e-01  -4.17536638e+03]
+ ..., 
+ [  1.21176851e+00  -9.47459932e-01  -4.11733913e-01  -4.72971902e-01
+   -3.19365183e-01  -3.05420841e+03]
+ [ -2.49293272e-01   1.23124677e+00  -2.79811062e-01   9.97918221e-01
+   -1.06553272e-01   5.20571272e+03]
+ [ -3.16412925e-01  -1.46055613e-01  -9.00412990e-02   1.37318608e+00
+   -5.57278509e-01   7.12238408e+03]] is your centered matrix.
+min of 0 is [ -5.30999996e+02   1.39999740e+01   1.99997476e-01   5.06699999e+03
+   2.70001483e+00]
+lasso_step failed at t=170698830.497, so it must be too big. Treating as Mt==0
+lasso_step failed at t=168713960.375, so it must be too big. Treating as Mt==0
+lasso_step failed at t=167721525.314, so it must be too big. Treating as Mt==0
+Tmax = 167721525.314
+0.0
+16772152.5314
+33544305.0627
+50316457.5941
+67088610.1255
+83860762.6569
+100632915.188
+117405067.72
+134177220.251
+150949372.782
+[array([ -5.30999996e+02,   1.39999740e+01,   1.99997476e-01,
+         5.06699999e+03,   2.70001483e+00]), array([ -3.64022615e+02,   3.99940958e-08,   8.43786264e-09,
+         4.89992839e+03,  -7.66817017e-09]), array([ -1.96920552e+02,  -4.75288105e-09,   1.33720399e-08,
+         4.73285165e+03,   3.43027708e-10]), array([ -2.97254540e+01,  -8.43489525e-08,  -1.00678114e-07,
+         4.56578819e+03,  -4.56926403e-09]), array([ -5.84697675e+00,   4.30552331e+00,   1.74163682e-03,
+         4.39205906e+03,  -6.04079420e-01]), array([ -3.49325501e+01,  -4.55797288e-01,  -8.60891380e+00,
+         4.22862671e+03,  -1.17038164e+00]), array([ -2.25981171e+00,  -9.15472918e-01,  -4.22718454e-01,
+         4.03588297e+03,  -9.26139876e-09]), array([ -1.35911744e-08,  -7.87392613e-09,  -9.10947627e-09,
+         3.89670401e+03,  -4.76433306e-09]), array([ -1.06498010e-08,  -7.05913764e-09,  -7.26159246e-09,
+         3.72961846e+03,  -4.48747563e-09])]
+]0;nikas@storm:~/cs2011[nikas@storm cs2011]$ python centeredMat.py Data1.txt lasso 5   [K[K7.8
+['centeredMat.py', 'Data1.txt', 'lasso', '5', '7.8']
+(100000, 6) 4800000 float64
+[[ -1.47181987e+00   1.39850733e-01   8.67797519e-01  -8.13084378e-01
+    1.36039208e-01  -3.33586343e+03]
+ [  9.66936930e-01  -2.46653812e+00   2.84957713e-01  -1.45918130e+00
+    1.94677073e+00  -7.93633022e+03]
+ [  1.23265784e-01   8.32925788e-01   7.94488640e-01  -8.13883055e-01
+    8.18098716e-01  -4.17536638e+03]
+ ..., 
+ [  1.21176851e+00  -9.47459932e-01  -4.11733913e-01  -4.72971902e-01
+   -3.19365183e-01  -3.05420841e+03]
+ [ -2.49293272e-01   1.23124677e+00  -2.79811062e-01   9.97918221e-01
+   -1.06553272e-01   5.20571272e+03]
+ [ -3.16412925e-01  -1.46055613e-01  -9.00412990e-02   1.37318608e+00
+   -5.57278509e-01   7.12238408e+03]] is your centered matrix.
+min of 7.8 is [ -5.30999919e+02   1.39998954e+01   1.99919141e-01   5.06699992e+03
+   2.69993677e+00]
+min of 0 is [ -5.30999996e+02   1.39999740e+01   1.99997476e-01   5.06699999e+03
+   2.70001483e+00]
+lasso_step failed at t=170698830.497, so it must be too big. Treating as Mt==0
+lasso_step failed at t=168713960.375, so it must be too big. Treating as Mt==0
+lasso_step failed at t=167721525.314, so it must be too big. Treating as Mt==0
+Tmax = 167721525.314
+0.0
+16772152.5314
+33544305.0627
+50316457.5941
+67088610.1255
+83860762.6569
+100632915.188
+117405067.72
+134177220.251
+150949372.782
+[array([ -5.30999996e+02,   1.39999740e+01,   1.99997476e-01,
+         5.06699999e+03,   2.70001483e+00]), array([ -3.64022615e+02,   3.99940958e-08,   8.43786264e-09,
+         4.89992839e+03,  -7.66817017e-09]), array([ -1.96920552e+02,  -4.75288105e-09,   1.33720399e-08,
+         4.73285165e+03,   3.43027708e-10]), array([ -2.97254540e+01,  -8.43489525e-08,  -1.00678114e-07,
+         4.56578819e+03,  -4.56926403e-09]), array([ -5.84697675e+00,   4.30552331e+00,   1.74163682e-03,
+         4.39205906e+03,  -6.04079420e-01]), array([ -3.49325501e+01,  -4.55797288e-01,  -8.60891380e+00,
+         4.22862671e+03,  -1.17038164e+00]), array([ -2.25981171e+00,  -9.15472918e-01,  -4.22718454e-01,
+         4.03588297e+03,  -9.26139876e-09]), array([ -1.35911744e-08,  -7.87392613e-09,  -9.10947627e-09,
+         3.89670401e+03,  -4.76433306e-09]), array([ -1.06498010e-08,  -7.05913764e-09,  -7.26159246e-09,
+         3.72961846e+03,  -4.48747563e-09])]
+]0;nikas@storm:~/cs2011[nikas@storm cs2011]$ exit
+exit
+
+Script done on Sun 10 May 2015 08:27:00 PM EDT

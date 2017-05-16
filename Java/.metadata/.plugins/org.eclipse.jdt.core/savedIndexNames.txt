@@ -1,0 +1,2 @@
+INDEX VERSION 1.126+/Users/nicolenikas/Documents/workspace/.metadata/.plugins/org.eclipse.jdt.core
+3901835060.index

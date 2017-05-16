@@ -1,0 +1,267 @@
+Script started on Sun 29 Mar 2015 09:16:12 PM EDT
+]0;nikas@storm:/home/students/nikas/cs2011[nikas@storm cs2011]$ exitpython defmatrix2.py[3Pcat[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+\
+#Nicole Nikas
+#03/24/2015
+#Lab04
+
+import operator
+class Matrix:
+
+    def __init__(self,listMatrix,isMatrix=True):
+        self.matrix = listMatrix
+        self.Cols = len(listMatrix)
+        self.Rows = len(listMatrix[0])
+        for eachRow in self.matrix :
+            if self.Rows != len( listMatrix[0] ) :
+                isMatrix = False;
+         
+        
+    def display(self):
+        print '\n'
+        for r in range(len(self.matrix)):
+            print self.matrix[r]
+
+    def scale(self,scale=0):
+        print "nNow scaling matrix by:\n"
+        print scale
+        
+        scaledMatrix=[]
+
+        for r in range( len(self.matrix) ):
+            scaledMatrix.append([])
+            for eachElem in self.matrix[r] :
+                scaledMatrix[r].append(scale*eachElem);
+        scaledMatrix = Matrix( scaledMatrix )
+        return scaledMatrix
+
+    def __add__(self,M):
+        try:
+            if not( self.Cols == M.Cols and self.Rows == M.Rows):
+                raise ValueError('Cannot add these Matrices.\n')
+        except ValueError:
+            raise
+        else:
+            
+            addedMatrix=[[self.matrix[r][c] + M.matrix[r][c] for c in range(self.Cols)] for r in range(self.Rows)]
+            print "\nNow adding matrix A and B:\n"
+        
+            addedMatrix = Matrix( addedMatrix )
+            return addedMatrix
+          
+          
+    def __sub__(self,M):
+        try:
+            if not( self.Cols == M.Cols and self.Rows == M.Rows):
+                raise ValueError('Cannot add these Matrices.\n')
+        except ValueError:
+            raise
+        else:
+            
+            subMatrix =[[self.matrix[r][c] - M.matrix[r][c] for c in range(self.Cols)] for r in range(self.Rows)]
+            print '\nNow subtracting matrix B from A:\n'
+            subMatrix = Matrix( subMatrix )
+            return subMatrix
+          
+
+    def __pow__(self,P=0):
+        print '\nNow raising Matrix to power of\n'
+        print P
+        if P == 1:
+            result = self.matrix
+
+        else:
+            result = self*self
+            for i in range (P>2):
+                result = result*self
+            
+
+
+        return result
+
+    def __mul__(self, M):
+        try:
+            if not (self.Rows==M.Cols):
+                raise ValueError('Cannot multiply these Matrices\n')
+        except ValueError:
+            raise
+        else:
+            MatrixFinal = []
+            for i in range(len(self.matrix[0])):
+                RowsMatrix=[]
+                for j in range(len(M.matrix[0])):
+                    m=0
+                    for k in range(len(M.matrix)):
+                        m+=self.matrix[i][k]*M.matrix[k][j]
+                    RowsMatrix.append(m)
+                MatrixFinal.append(RowsMatrix)
+
+            MatrixFinal = Matrix( MatrixFinal )
+            return MatrixFinal
+          
+    def transpose(self):
+        print 'Now Transposing Matrix '
+          
+        self.matrix=[[row[i] for row in self.matrix] for i in range(self.Rows)]
+      
+        for r in range(len(self.matrix)):
+            print self.matrix[r]
+
+
+
+
+
+
+
+
+
+try:
+    fobj=open('filem.txt')
+    A1,B1,C1,D1=fobj.readlines()
+    print A1, B1, C1, D1
+    
+    A=Matrix(eval(A1))
+    B=Matrix(eval(B1))
+    C=Matrix(eval(C1))
+    D=Matrix(eval(D1))
+   
+    print 'Your options for matrices are'
+    print 'A='
+    A.display()
+    print 'B='
+    B.display()
+    print 'C='
+    C.display()
+    print 'D='
+    D.display()
+    Dict1={"A":A,"B":B,"C":C,"D":D}
+   
+    print 'Your operations options are +, -, *, ^'
+    first,op,third = raw_input('Enter opperation:')
+    print first, op, third
+
+    if Dict1.has_key(first):
+        print first, ' is a Matrix'
+        mat1=Dict1.get(first)
+        mat1.display()
+    else:
+        print first,'is not a Matrix.'
+
+    if Dict1.has_key(third):
+        print third, ' is a Matrix'
+        mat2=Dict1.get(third)
+	mat2.display()
+    else:
+        print third,'is  not a Matrix.'
+
+
+    
+    if op == '+':
+        answer=mat1 + mat2
+    elif op== '-':
+        answer=mat1 - mat2
+    elif op== '*':
+        answer=mat1 * mat2
+    elif op== '^':
+        answer=mat1 ** third
+    else:
+        print 'incorrect operator choice'
+
+    answer.display()
+except IOError,e:
+    print e
+else:
+    fobj.close()
+    
+]0;nikas@storm:/home/students/nikas/cs2011[nikas@storm cs2011]$ cat defmatrix2.pyexit[Kpython defmatrix2.py
+[ [1,2], [3,4] ]
+[ [3,4], [5,6] ]
+[ [2,3], [9,7] ]
+[ [4,5], [6,7] ]
+
+Your options for matrices are
+A=
+
+
+[1, 2]
+[3, 4]
+B=
+
+
+[3, 4]
+[5, 6]
+C=
+
+
+[2, 3]
+[9, 7]
+D=
+
+
+[4, 5]
+[6, 7]
+Your operations options are +, -, *, ^
+Enter opperation:A** C
+A * C
+A  is a Matrix
+
+
+[1, 2]
+[3, 4]
+C  is a Matrix
+
+
+[2, 3]
+[9, 7]
+
+
+[20, 17]
+[42, 37]
+]0;nikas@storm:/home/students/nikas/cs2011[nikas@storm cs2011]$ python defmatrix2.py
+[ [1,2], [3,4] ]
+[ [3,4], [5,6] ]
+[ [2,3], [9,7] ]
+[ [4,5], [6,7] ]
+
+Your options for matrices are
+A=
+
+
+[1, 2]
+[3, 4]
+B=
+
+
+[3, 4]
+[5, 6]
+C=
+
+
+[2, 3]
+[9, 7]
+D=
+
+
+[4, 5]
+[6, 7]
+Your operations options are +, -, *, ^
+Enter opperation:A D^5
+D ^ 5
+D  is a Matrix
+
+
+[4, 5]
+[6, 7]
+5 is  not a Matrix.
+
+Now raising Matrix to power of
+
+5
+
+
+[514, 615]
+[738, 883]
+]0;nikas@storm:/home/students/nikas/cs2011[nikas@storm cs2011]$ exit
+exit
+
+Script done on Sun 29 Mar 2015 09:16:56 PM EDT

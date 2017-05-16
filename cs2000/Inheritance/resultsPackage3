@@ -1,0 +1,445 @@
+Script started on Tue 10 May 2016 08:44:14 PM EDT
+]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ pwd
+/home/students/nicolenikas/CISC2000/Inheritance
+]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ cat Package.[K[K[K[K[K[K[K[KCustomer.h
+#ifndef CUSTOMER_H
+#define CUSTOMER_H
+
+#include <iostream>
+using namespace std;
+
+class Customer {
+
+        friend istream &operator>>(istream&, Customer&);
+        friend ostream &operator<<(ostream&, const Customer&);
+
+public:
+        Customer ();
+
+private:
+        string fname, lname, address, city, state, zip;
+};
+
+#endif]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ cat Customer.cpp
+#include "Customer.h"
+
+Customer::Customer() {
+
+        fname = "Nicole";
+        lname = "Nikas";
+        address = "3Maher";
+        city = "Greenwich";
+        state = "Connecticut";
+        zip = "06830";
+}
+
+istream &operator>>(istream&i, Customer&c) {
+
+        cout << "\nPlease enter customer information " << endl;
+        cout << "Enter customer first and last name: ";
+        i >> c.fname >> c.lname;
+        cout << "Enter street address: ";
+        i >> c.address;
+        cout << "Enter city: ";
+        i >> c.city;
+        cout << "Enter state: ";
+        i >> c.state;
+        cout << "Enter zipcode: ";
+        i >> c.zip;
+
+        return (i);
+}
+
+ostream &operator<<(ostream&o, const Customer&c) {
+
+        o << "Customer name: " << c.fname << ' ' << c.lname << endl;
+        o << "Street address: " << c.address << endl;
+        o << "City: " << c.city << endl;
+        o << "State: " << c.state << endl;
+        o << "Zip Code: " << c.zip << endl;
+
+        return (o);
+}]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ cat Package.h
+#ifndef PACKAGE_H
+#define PACKAGE_H
+
+#include "Customer.h"
+
+class Package {
+
+public:
+        Package(){
+                
+        oz = 5.00;
+        costPerOunce = 5.00;
+
+        }
+        Package(double, double, Customer, Customer);
+        double calculateCost();
+        bool inRange(double, double, double);
+        void printCustomer();
+        static void printSummaryInfo();
+        static int nTwoDays;
+        static int nOverNights;
+        static double tdProfit;
+        static double onProfit;
+        
+protected:
+        Customer send;
+        Customer rec;
+        double oz;
+        double costPerOunce;
+
+};
+
+#endif
+
+]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ cat C[KPackage.cpp
+#include "Package.h"
+
+int Package::nTwoDays = 0;
+int Package::nOverNights= 0;
+double Package::tdProfit = 0.00;
+double Package::onProfit = 0.00;
+
+
+
+Package::Package(double w, double c, Customer s, Customer r) {
+
+        oz = w;
+        costPerOunce = c;
+        send = s;
+        rec = r;
+
+}
+
+double Package::calculateCost () {
+
+        return(oz*costPerOunce);
+}
+
+bool Package::inRange(double f1, double f2, double c ) {
+
+        bool retstat = false;
+        if (f1>=0 && f2>=0 && c>=0)
+            retstat = true;
+        else
+            cout << "No negative values allowed. Please re-enter values." << endl;
+
+        return(retstat);
+}
+
+
+void Package::printCustomer() {
+
+        cout << "\nSender Information\n" << send << endl;
+        cout << "Recipient Information\n" << rec << endl;
+}
+
+
+void Package::printSummaryInfo() {
+
+        cout << "Total number of packages sent: " << nTwoDays+nOverNights << endl;
+        cout << nTwoDays << " two day packages were sent, generating $" << tdProfit << "  and \
+" << nOverNights << " overnight packages were sent, generating $" << onProfit << '.' << endl;
+
+}
+]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ cat OverNight.h
+#ifndef OVERNIGHT_H
+#define OVERNIGHT_H
+
+#include "Package.h"
+
+class OverNight: public Package {
+
+public:
+        OverNight(){
+
+        addfee = 2.75;
+
+        }
+        OverNight(double, double, double, Customer, Customer);
+        double calculateCost();
+        void print();
+
+private:
+        double addfee;
+};
+
+#endif]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ cat OverNight.cpp
+#include "OverNight.h"
+
+
+OverNight::OverNight(double f, double w, double c, Customer s, Customer r): Package(w, c, s, r) {
+
+        addfee = f;
+        nOverNights++;
+        onProfit += oz*(costPerOunce+addfee);
+}
+
+
+double OverNight::calculateCost() {
+
+        return(oz*(costPerOunce+addfee));
+}
+
+void OverNight::print() {
+
+        printCustomer();
+        cout << "Overnight package delivery: additional cost per ounce = $" << addfee << endl;
+        cout << oz << " ounces at $" << costPerOunce+addfee << " per ounce.\nTotal cost: $\
+" << calculateCost() << endl;
+
+}
+]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ cat TwoDay.h
+#ifndef TWODAY_H
+#define OVERNIGHT_H
+
+#include "Package.h"
+
+class TwoDay: public Package {
+
+public:
+        TwoDay(){
+
+        ffee = 5.00;
+        
+                
+        }
+        TwoDay(double, double, double, Customer, Customer);
+        double calculateCost();
+        void print();
+private:
+        double ffee;
+};
+
+#endif]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ cat Two.D[K[Kd[KDay.h[Kcpp
+#include "TwoDay.h"
+
+
+
+TwoDay::TwoDay (double f, double w, double c, Customer s, Customer r): Package(w, c, s, r) {
+
+        ffee = f;
+        nTwoDays++;
+        tdProfit += oz*costPerOunce + ffee;
+
+}
+double TwoDay::calculateCost() {
+
+        return (oz*costPerOunce + ffee);
+}
+
+void TwoDay::print() {
+
+        printCustomer();
+        cout << "Two day package delivery: flat fee = $" << ffee << endl;
+        cout << oz << " ounces at $" << costPerOunce << " per ounce."<<endl;
+        cout<<"Total: $"<< calculateCost() << endl;
+}]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ cat execPackage.cpp
+#include "OverNight.h"
+#include "TwoDay.h"
+
+main () {
+
+        int response;
+        double ounces, costPerOunce, flatfee, addfee;
+        int i = 0;
+        int j = 0;
+
+
+        TwoDay *td[100];
+        OverNight *on[100];
+
+        Package p;
+        Customer send;
+        Customer rec;
+
+        //check if the numbers are negative
+        if(p.inRange(flatfee, addfee, costPerOunce)==true){
+                cout << "Enter flat fee for two day delivery: $";
+                cin >> flatfee;
+                cout << "Enter additional fee per ounce for overnight delivery: $";
+                cin >> addfee;
+                cout << "Enter cost per ounce: $";
+                cin >> costPerOunce;
+        }
+
+        
+        //requests user input
+        cout << "What would you like to do? 0:Exit 1:Overnight 2:Two-Day ";
+        cin >> response;
+        
+        //This is the exit option
+        if (response == 0){
+                cout<<"Goodbye"<<endl;
+        }
+        while(response!=0){
+        cout << "Enter weight of package in ounces: ";
+        cin >> ounces;
+
+        // this section adds to the overnight are twoday until it reaches 100 the maximum
+
+        if(response==1){
+                if (i<100) {
+
+                        cin >> send >> rec;
+                        td[i] = new TwoDay (flatfee, ounces, costPerOunce, send, rec);
+                        td[i] -> print();
+
+                        i++;
+                }
+        }
+
+        if(response==2){
+                if (j<100) {
+                    
+                        cin >> send >> rec;
+                        on[j] = new OverNight (addfee, ounces, costPerOunce, send, rec);
+                        on[j] -> print();
+                    
+                        j++;
+                }
+        }
+
+        cout << "Would you like to enter again? 0:Exit 1:Overnight 2:Two-Day";
+        cin >> response;
+        }
+        //summary of two day packages ordered
+        cout << "Two day packages:" << endl;
+        for (int i=0; i<Package::nTwoDays; i++){
+                cout << "Package number " << i+1 << endl;
+                td[i] -> print();
+        }
+        //summary of overnight packages ordered
+        cout << "Overnight packages:" << endl;
+        for (int i=0; i<Package::nOverNights; i++){
+                cout << "Package number" << i+1 << endl;
+                on[i] -> print();
+        }
+        //summary of all packages
+        Package::printSummaryInfo();
+
+        cout << "Thank you for mailing!" << endl;
+}
+]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ g++ Customer.cpp Package.cpp T[KOvern[KNight.cpp TwoDay.cpp execPackage.cpp -o pac
+]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ ./pac
+Enter flat fee for two day delivery: $1.
+Enter additional fee per ounce for overnight delivery: $.05
+Enter cost per ounce: $.25
+What would you like to do? 0:Exit 1:Overnight 2:Two-Day 1
+Enter weight of package in ounces: 5
+
+Please enter customer information 
+Enter customer first and last name: Nicole Nikas
+Enter street address: 2m  3maherave        MaherAve
+Enter city: Greenwich
+Enter state: CT
+Enter zipcode: 069 830
+
+Please enter customer information 
+Enter customer first and last name: Mike Badey
+Enter street address: HoffmanSt
+Enter city: Bronx
+Enter state: NY
+Enter zipcode: 0 10459 8
+
+Sender Information
+Customer name: Nicole Nikas
+Street address: 3MaherAve
+City: Greenwich
+State: CT
+Zip Code: 06830
+
+Recipient Information
+Customer name: Mike Badey
+Street address: HoffmanSt
+City: Bronx
+State: NY
+Zip Code: 10458
+
+Two day package delivery: flat fee = $1
+5 ounces at $0.25 per ounce.
+Total: $2.25
+Would you like to enter again? 0:Exit 1:Overnight 2:Two-Day2
+Enter weight of package in ounces: 8
+
+Please enter customer information 
+Enter customer first and last name: Nicole Nikas
+Enter street address: 3maherA      MaherAve
+Enter city: Greenwich
+Enter state: CT
+Enter zipcode: 06830
+
+Please enter customer information 
+Enter customer first and last name: Mike Badey
+Enter street address: HoffmanSt
+Enter city: Bronx
+Enter state: NY
+Enter zipcode: 10458
+
+Sender Information
+Customer name: Nicole Nikas
+Street address: 3MaherAve
+City: Greenwich
+State: CT
+Zip Code: 06830
+
+Recipient Information
+Customer name: Mike Badey
+Street address: HoffmanSt
+City: Bronx
+State: NY
+Zip Code: 10458
+
+Overnight package delivery: additional cost per ounce = $0.05
+8 ounces at $0.3 per ounce.
+Total cost: $2.4
+Would you like to enter again? 0:Exit 1:Overnight 2:Two-Day0
+Two day packages:
+Package number 1
+
+Sender Information
+Customer name: Nicole Nikas
+Street address: 3MaherAve
+City: Greenwich
+State: CT
+Zip Code: 06830
+
+Recipient Information
+Customer name: Mike Badey
+Street address: HoffmanSt
+City: Bronx
+State: NY
+Zip Code: 10458
+
+Two day package delivery: flat fee = $1
+5 ounces at $0.25 per ounce.
+Total: $2.25
+Overnight packages:
+Package number1
+
+Sender Information
+Customer name: Nicole Nikas
+Street address: 3MaherAve
+City: Greenwich
+State: CT
+Zip Code: 06830
+
+Recipient Information
+Customer name: Mike Badey
+Street address: HoffmanSt
+City: Bronx
+State: NY
+Zip Code: 10458
+
+Overnight package delivery: additional cost per ounce = $0.05
+8 ounces at $0.3 per ounce.
+Total cost: $2.4
+Total number of packages sent: 2
+1 two day packages were sent, generating $2.25  and 1 overnight packages were sent, generating $2.4.
+Thank you for mailing!
+]0;nicolenikas@storm:~/CISC2000/Inheritance[nicolenikas@storm Inheritance]$ excit[K[K[Kit
+exit
+
+Script done on Tue 10 May 2016 08:48:49 PM EDT

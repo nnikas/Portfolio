@@ -1,0 +1,50 @@
+nnikas:~/workspace $ g++ randfunc.cpp -o randfunc
+nnikas:~/workspace $ ./randfunc
+level number :1
+0 / 1
+Answer the following equation.
+1
+1 is incorrect
+2 + 9
+Answer the following equation.
+1
+1 is incorrect
+2 * 2
+Answer the following equation.
+1
+1 is incorrect
+5 * 2
+Answer the following equation.
+1
+1 is incorrect
+9 / 3
+Answer the following equation.
+1
+1 is incorrect
+6 - 3
+Answer the following equation.
+1
+1 is incorrect
+6 * 5
+Answer the following equation.
+1
+1 is incorrect
+4 - 1
+Answer the following equation.
+1
+1 is incorrect
+0 * 2
+Answer the following equation.
+1
+1 is incorrect
+9 - 7
+Answer the following equation.
+1
+1 is incorrect
+A 65535
+C 2028655833
+F 0
+1.) Continue at the current level.
+2.) Go to the next level.
+3.) Display summary statistics for the current level.
+4.) Quit.

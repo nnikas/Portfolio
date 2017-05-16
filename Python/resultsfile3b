@@ -1,0 +1,173 @@
+Script started on Tue 24 Feb 2015 03:46:54 PM EST
+]0;nikas@storm:/home/students/nikas/cs2011[nikas@storm cs2011]$ catmartix.[K[K[K[K[K[K[K defmatrix.py
+#Nicole Nikas
+#02/24/2015
+#Lab03
+
+
+
+
+class Matrix:
+
+    def __init__(self,listMatrix):
+        self.matrix = listMatrix
+        self.Cols = len(listMatrix)
+        self.Rows = len(listMatrix[0])
+
+    def display(self):
+        print '\n'
+        for r in range(len(self.matrix)):
+            print self.matrix[r]
+
+    def scale(self,scale=0):
+        print 'nNow scaling matrix by:\n'
+        print scale
+        
+        scaledMatrix=[]
+
+        for r in range( len(self.matrix) ):
+            scaledMatrix.append([])
+            for eachElem in self.matrix[r] :
+                scaledMatrix[r].append(scale*eachElem);
+        scaledMatrix = Matrix( scaledMatrix )
+        return scaledMatrix
+
+    def add(self,M):
+
+        addedMatrix=[[self.matrix[r][c] + M.matrix[r][c] for c in range(self.Cols)] for r in range(self.Rows)]
+        print '\nNow adding matrix A and B:\n'
+        
+        addedMatrix = Matrix( addedMatrix )
+        return addedMatrix
+
+    def sub(self,M):
+
+        subMatrix =[[self.matrix[r][c] - M.matrix[r][c] for c in range(self.Cols)] for r in range(self.Rows)]
+        print '\nNow subtracting matrix B from A:\n'
+        subMatrix = Matrix( subMatrix )
+        return subMatrix
+
+    def power(self, P=0):
+        result =[[]]
+        print 'n\Now raising Matrix to power of\n'
+        print P
+        if P == 1:
+            result = self.matrix
+
+        else:
+            result = self.multi(self)
+            for i in range (P>2):
+                result = result.multi(self)
+            
+
+
+        return result
+        
+
+               
+
+    def multi(self, M):
+
+        MatrixFinal = []
+        for j in range(len(M.matrix)):
+            RowsMatrix=[]
+            for k in range(len(M.matrix)):
+                m=0
+                for l in range(len(M.matrix)):
+                    m+=self.matrix[j][l]*M.matrix[l][k]
+                RowsMatrix.append(m)
+            MatrixFinal.append(RowsMatrix)
+
+        MatrixFinal = Matrix( MatrixFinal )
+        return MatrixFinal 
+    def transpose(self):
+        print 'Now Transposing Matrix '
+          
+        self.matrix=[[row[i] for row in self.matrix] for i in range(self.Rows)]
+      
+        for r in range(len(self.matrix)):
+            print self.matrix[r]
+      
+      
+
+LA = [[1,2],[3,4]]
+LB = [[4,5],[2,5]]
+matrixA = Matrix(LA)
+matrixB = Matrix(LB)
+matrixA.display()
+matrixB.display()
+matrixC= matrixA.multi(matrixB)
+print 'n\Now multiplyiny the two matrices.\n'
+matrixC.display()
+
+F= [[5,4],[2,3]]
+matrixF= Matrix(F)
+matrixF.display()
+matrixN=matrixF.scale(3)
+matrixN.display()
+
+T= [[7,7],[4,4]]
+matrixT= Matrix(T)
+matrixT.display()
+matrixT.transpose()
+
+P = [[9,8],[7,6]]
+matrixP= Matrix(P)
+matrixP.display()
+matrixH=matrixP.power(5)
+matrixH.display()
+
+matrixD=matrixA.add(matrixB)
+matrixD.display()
+matrixE=matrixA.sub(matrixB)
+matrixE.display()
+
+
+
+
+
+
+                    
+    
+]0;nikas@storm:/home/students/nikas/cs2011[nikas@storm cs2011]$ python matrix.py
+Print Each Row using iteration:
+
+[1, 2, 3]
+[4, 5, 6]
+[7, 8, 9]
+
+Print Each Row using range() to create an index offset
+
+[1, 2, 3]
+[4, 5, 6]
+[7, 8, 9]
+
+Print each element using for loop iteration:
+
+1   2   3  
+4   5   6  
+7   8   9  
+
+Print each element using range to create an index offset:
+
+1   2   3  
+4   5   6  
+7   8   9  
+
+Scaling matrix by:  2 :
+
+[[2, 4, 6], [8, 10, 12], [14, 16, 18]]
+
+Adding original Matrix and Scaled matrix using List Comprehension:
+
+[[1, 2, 3], [4, 5, 6], [7, 8, 9]]  +
+[[2, 4, 6], [8, 10, 12], [14, 16, 18]]  =
+[[3, 6, 9], [12, 15, 18], [21, 24, 27]]
+
+Subtracting Scaled matrix from the original Matrix  using the List Comprehension:
+
+[[1, 2, 3], [4, 5, 6], [7, 8, 9]] -
+[[2, 4, 6], [8, 10, 12], [14, 16, 18]] =
+[[-1, -2, -3], [-4, -5, -6], [-7, -8, -9]]
+
+Multiplying original 

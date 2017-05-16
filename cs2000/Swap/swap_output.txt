@@ -1,0 +1,32 @@
+nnikas:~/workspace $ g++ swap_II.cpp -o swap
+nnikas:~/workspace $ ./swap
+Now swaping the arrays...
+Now displaying the even list with the swapped elements
+1
+4
+5
+8
+9
+12
+13
+16
+17
+20
+Now displaying the odd list with the swapped elements
+2
+3
+6
+7
+10
+11
+14
+15
+18
+19
+Now initializing the 5 by 3 matrix.
+Now displaying the initialized matrix that is 5 by 3
+2       3       6
+1       4       5
+7       10      11
+8       9       12
+14      15      18

@@ -1,0 +1,51 @@
+nnikas:~/workspace $ cd Classes
+nnikas:~/workspace/Classes $ cd Student
+nnikas:~/workspace/Classes/Student $ g++ date.cpp execdate.cpp -o date
+nnikas:~/workspace/Classes/Student $ ./date
+Now testing dt
+The date you entered is: 
+-1/-1/-1
+Now testing dt
+The date you entered is: 
+24/5/1994
+Now testing dt
+The date you entered is: 
+22/11/1993
+
+nnikas:~/workspace/Classes/Student $ g++ name.cpp execname.cpp -o name
+nnikas:~/workspace/Classes/Student $ ./name
+Now testing n1
+Name: Nicole N Nikas
+Now testing n2
+Name: Angelina J Pitt
+
+nnikas:~/workspace/Classes/Student $ g++ program.cpp execprogram.cpp -o program
+nnikas:~/workspace/Classes/Student $ ./program
+Now testing p1
+Program: RH Engineering CompSci BS
+Now testing p2
+Program: RH Engineering CompSci BS
+
+nnikas:~/workspace/Classes/Student $ g++ student.cpp date.cpp name.cpp program.cpp execstudent.cpp -o student
+nnikas:~/workspace/Classes/Student $ ./student
+Now computing test on Student 1 
+Name: Nicole N Nikas
+Student ID Number: 10707330
+Gender: F
+The date you entered is: 
+-1/-1/-1
+Program: RH Engineering CompSci BS
+Now computing test on Student 2 
+Name: Nicole N Nikas
+Student ID Number: 10707360
+Gender: F
+The date you entered is: 
+-1/-1/-1
+Program: RH Engineering CompSci BS
+Now computing test on Student 3 
+Name: Mike J Badey
+Student ID Number: 12121212
+Gender: M
+The date you entered is: 
+22/11/1993
+Program: RH Buisness Finance BA

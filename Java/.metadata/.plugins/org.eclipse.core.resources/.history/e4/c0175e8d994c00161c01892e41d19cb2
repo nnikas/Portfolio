@@ -1,0 +1,15 @@
+
+public class TwoStroke extends Engine {
+
+	public TwoStroke(int id, double volume, double fuelCapacity, char fuelType) {
+		super(id, volume, fuelCapacity, fuelType);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public double getMileage() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}
